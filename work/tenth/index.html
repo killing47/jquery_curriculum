@@ -68,6 +68,42 @@
       //
       //
       //
+      $('#js-search-button').on('click', function(){
+
+        var keyword = $('#js-search-word').val();
+
+        $.ajax({
+          url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+          type: 'GET',
+          datatype: 'json',
+          data: {
+            // 「区分:サービス固有パラメーター」を確認して、必要な情報をdata内に入れましょう。
+            applicationId: '1019399324990976605', // (今回はこのIDを使用してください)
+            booksGenreId: '001',
+            keyword: keyword
+          },
+        }).done(function(data) {
+          // この中にデータ取得後の動きを記述していきます。
+          $.each(data['Items'],function(index, value){
+            $.each(value, function(index, value){
+              console.log(value);
+              $("ul").append(`<li class='lists__item'>
+                <div class='lists__item__inner'>
+                  <a href='${value['itemUrl']}' class='lists__item__link' target='_blank'>
+                    <img src='${value['largeImageUrl']}' class='lists__item__img' alt='${value[' title']}'>
+                    <p class='lists__item__detail'>作品名：${value['title']}</p>
+                    <p class='lists__item__detail'>作者　：${value['author']}</p>
+                    <p class='lists__item__detail'>出版社：${value['publisherName']}</p>
+                  </a>
+                </div>
+              </li>`);
+            })
+          })
+        });
+      });
+
     </script>
   </body>
 </html>
+
+
